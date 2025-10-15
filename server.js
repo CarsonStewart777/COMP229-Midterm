@@ -37,12 +37,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Array of game objects
 let games = [
-  { title: 'The Legend of Zelda: Breath of the Wild', genre: 'Adventure', platform: 'Nintendo Switch', year: 2017, developer: 'Nintendo' },
-  { title: 'God of War', genre: 'Action', platform: 'PlayStation 4', year: 2018, developer: 'Santa Monica Studio' },
-  { title: 'Hollow Knight', genre: 'Metroidvania', platform: 'PC', year: 2017, developer: 'Team Cherry' },
-  { title: 'Forza Horizon 5', genre: 'Racing', platform: 'Xbox Series X|S', year: 2021, developer: 'Playground Games' },
-  { title: 'Stardew Valley', genre: 'Simulation', platform: 'Nintendo Switch', year: 2016, developer: 'ConcernedApe' },
+  { id: 1, title: 'The Legend of Zelda: Breath of the Wild', genre: 'Adventure', platform: 'Nintendo Switch', year: 2017, developer: 'Nintendo' },
+  { id: 2, title: 'God of War', genre: 'Action', platform: 'PlayStation 4', year: 2018, developer: 'Santa Monica Studio' },
+  { id: 3, title: 'Hollow Knight', genre: 'Metroidvania', platform: 'PC', year: 2017, developer: 'Team Cherry' },
+  { id: 4, title: 'Forza Horizon 5', genre: 'Racing', platform: 'Xbox Series X|S', year: 2021, developer: 'Playground Games' },
+  { id: 5, title: 'Stardew Valley', genre: 'Simulation', platform: 'Nintendo Switch', year: 2016, developer: 'ConcernedApe' },
   {
+    id: 6,
     title: 'Stardew Valley',
     genre: 'Simulation RPG',
     platform: 'PC',
@@ -50,6 +51,7 @@ let games = [
     developer: 'ConcernedApe'
   },
   {
+    id: 7,
     title: 'Hades',
     genre: 'Roguelike',
     platform: 'PC',
@@ -57,6 +59,7 @@ let games = [
     developer: 'Supergiant Games'
   }
 ];
+let nextId = 8;
 
 // Set the port for the server
 const PORT = 3000;
@@ -72,96 +75,79 @@ app.get('/', (req, res) => {
 // Description: Get all games
 // Task: Implement logic to return the full list of games
 app.get('/api/games', (req, res) => {
-  // TODO: Add logic to return all games
-
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  res.json(games);
 });
 
 // GET /api/games/filter?genre=[genre name]
 // Description: Filter games by genre
 // Task: Implement logic to return games matching the specified genre
 app.get('/api/games/filter', (req, res) => {
-  // TODO: Add logic to filter games by genre
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  const genre = req.query.genre;
+  if (!genre) {
+    return res.status(400).json({ message: 'Genre query parameter is required' });
+  }
+  const filteredGames = games.filter(game => game.genre.toLowerCase() === genre.toLowerCase());
+  res.json(filteredGames);
 });
 
 // GET /api/games/:id
 // Description: Get a specific game by ID
 // Task: Implement logic to return a game by its index (ID)
 app.get('/api/games/:id', (req, res) => {
-  // TODO: Add logic to return a game by its index (ID)
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  const id = parseInt(req.params.id);
+  const game = games.find(g => g.id === id);
+  if (game) {
+    res.json(game);
+  } else {
+    res.status(404).json({ message: 'Game not found' });
+  }
 });
 
 // POST /api/games
 // Description: Add a new game
 // Task: Implement logic to add a new game to the array
 app.post('/api/games', (req, res) => {
-  // TODO: Add logic to add a new game to the array
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  const { title, genre, platform, year, developer } = req.body;
+  if (!title) {
+    return res.status(400).json({ message: 'Title is required' });
+  }
+  const newGame = {
+    id: nextId++,
+    title,
+    genre,
+    platform,
+    year,
+    developer
+  };
+  games.push(newGame);
+  res.status(201).json(newGame);
 });
 
 // PUT /api/games/:id
 // Description: Update a game by ID
 // Task: Implement logic to update a game by its index (ID)
 app.put('/api/games/:id', (req, res) => {
-  // TODO: Add logic to update a game by its index
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  const id = parseInt(req.params.id);
+  const gameIndex = games.findIndex(g => g.id === id);
+  if (gameIndex === -1) {
+    return res.status(404).json({ message: 'Game not found' });
+  }
+  const updatedGame = { ...games[gameIndex], ...req.body };
+  games[gameIndex] = updatedGame;
+  res.json(updatedGame);
 });
 
 // DELETE /api/games/:id
 // Description: Remove a game by ID
 // Task: Implement logic to remove a game by its index (ID)
 app.delete('/api/games/:id', (req, res) => {
-  // TODO: Add logic to remove a game by its index
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  const id = parseInt(req.params.id);
+  const gameIndex = games.findIndex(g => g.id === id);
+  if (gameIndex === -1) {
+    return res.status(404).json({ message: 'Game not found' });
+  }
+  games.splice(gameIndex, 1);
+  res.status(204).send();
 });
 
 // Start the server
