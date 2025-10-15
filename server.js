@@ -41,7 +41,21 @@ let games = [
   { title: 'God of War', genre: 'Action', platform: 'PlayStation 4', year: 2018, developer: 'Santa Monica Studio' },
   { title: 'Hollow Knight', genre: 'Metroidvania', platform: 'PC', year: 2017, developer: 'Team Cherry' },
   { title: 'Forza Horizon 5', genre: 'Racing', platform: 'Xbox Series X|S', year: 2021, developer: 'Playground Games' },
-  { title: 'Stardew Valley', genre: 'Simulation', platform: 'Nintendo Switch', year: 2016, developer: 'ConcernedApe' }
+  { title: 'Stardew Valley', genre: 'Simulation', platform: 'Nintendo Switch', year: 2016, developer: 'ConcernedApe' },
+  {
+    title: 'Stardew Valley',
+    genre: 'Simulation RPG',
+    platform: 'PC',
+    year: 2016,
+    developer: 'ConcernedApe'
+  },
+  {
+    title: 'Hades',
+    genre: 'Roguelike',
+    platform: 'PC',
+    year: 2020,
+    developer: 'Supergiant Games'
+  }
 ];
 
 // Set the port for the server
